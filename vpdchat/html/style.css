@@ -1,49 +1,186 @@
-body {
+* {
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI';
-    overflow: hidden;
+    box-sizing: border-box;
 }
 
-#chat-container {
-    position: absolute;
-    left: 15px;
-    bottom: 15px;
-    width: 450px;
-    max-height: 400px;
-    overflow-y: hidden;
+body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow: hidden;
+    background: transparent;
+}
+
+#chat-wrapper {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    width: 520px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     pointer-events: none;
 }
 
-.twt {
-    background: #1DA1F2;
-    padding: 8px;
-    margin-top: 5px;
-    border-radius: 8px;
-    color: white;
+#chat-messages {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    max-height: 380px;
+    overflow: hidden;
+    padding-bottom: 4px;
 }
 
-.blackweb {
-    background: #121212;
-    border-left: 4px solid #9C27B0;
-    padding: 8px;
-    margin-top: 5px;
-    border-radius: 8px;
-    color: white;
+/* ── Chat Input ── */
+
+#chat-input-wrapper {
+    background: rgba(12, 12, 20, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-top: 6px;
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.ooc {
-    background: rgba(150, 150, 150, .25);
-    padding: 8px;
-    margin-top: 5px;
-    border-radius: 8px;
-    color: white;
+#chat-input-wrapper.hidden {
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
 }
 
-.me {
-    background: #C8A2C8;
-    color: black;
-    padding: 8px;
-    margin-top: 5px;
+#chat-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #e8e8e8;
+    font-size: 14px;
+    font-family: inherit;
+    letter-spacing: 0.2px;
+    caret-color: #1DA1F2;
+}
+
+#chat-input::placeholder {
+    color: rgba(255, 255, 255, 0.28);
+}
+
+/* ── Message Base ── */
+
+.chat-msg {
+    padding: 7px 12px;
+    margin-bottom: 3px;
     border-radius: 8px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: #e0e0e0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    animation: msgSlideIn 0.25s ease-out;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.chat-msg.fade-out {
+    animation: msgFadeOut 0.5s ease-out forwards;
+}
+
+/* ── Local / Default Chat ── */
+
+.msg-local {
+    background: rgba(25, 25, 40, 0.72);
+    backdrop-filter: blur(6px);
+    border-left: 3px solid rgba(255, 255, 255, 0.18);
+}
+
+.msg-name {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+/* ── /me Action Text ── */
+
+.msg-me {
+    background: rgba(200, 162, 200, 0.16);
+    backdrop-filter: blur(6px);
+    border-left: 3px solid #C8A2C8;
+    color: #d4b8d4;
+    font-style: italic;
+}
+
+/* ── /twt Twitter / Social ── */
+
+.msg-twt {
+    background: rgba(29, 161, 242, 0.14);
+    backdrop-filter: blur(6px);
+    border-left: 3px solid #1DA1F2;
+}
+
+.msg-twt .msg-icon {
+    margin-right: 3px;
+}
+
+.msg-twt .msg-tag {
+    font-weight: 600;
+    color: #1DA1F2;
+}
+
+/* ── /blackweb Dark Web ── */
+
+.msg-blackweb {
+    background: rgba(10, 10, 10, 0.88);
+    backdrop-filter: blur(6px);
+    border-left: 3px solid #9C27B0;
+}
+
+.msg-blackweb .msg-icon {
+    margin-right: 3px;
+}
+
+.msg-blackweb .msg-tag {
+    font-weight: 700;
+    color: #BA68C8;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 12px;
+}
+
+/* ── /ooc Out of Character ── */
+
+.msg-ooc {
+    background: rgba(140, 140, 140, 0.12);
+    backdrop-filter: blur(6px);
+    border-left: 3px solid rgba(200, 200, 200, 0.35);
+    color: #b0b0b0;
+}
+
+.msg-ooc .msg-name {
+    font-weight: 600;
+    color: #cccccc;
+}
+
+/* ── Animations ── */
+
+@keyframes msgSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes msgFadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
 }
