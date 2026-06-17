@@ -1,44 +1,49 @@
-body{
-    margin:0;
-    padding:0;
-    font-family:'Segoe UI';
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI';
+    overflow: hidden;
 }
 
-.chat-window{
-    position:absolute;
-    left:15px;
-    bottom:15px;
-    width:450px;
+#chat-container {
+    position: absolute;
+    left: 15px;
+    bottom: 15px;
+    width: 450px;
+    max-height: 400px;
+    overflow-y: hidden;
+    pointer-events: none;
 }
 
-.twt{
-    background:#1DA1F2;
-    padding:8px;
-    margin-top:5px;
-    border-radius:8px;
-    color:white;
+.twt {
+    background: #1DA1F2;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 8px;
+    color: white;
 }
 
-.blackweb{
-    background:#121212;
-    border-left:4px solid #9C27B0;
-    padding:8px;
-    margin-top:5px;
-    border-radius:8px;
-    color:white;
+.blackweb {
+    background: #121212;
+    border-left: 4px solid #9C27B0;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 8px;
+    color: white;
 }
 
-.ooc{
-    background:rgba(150,150,150,.25);
-    padding:8px;
-    margin-top:5px;
-    border-radius:8px;
-    color:white;
+.ooc {
+    background: rgba(150, 150, 150, .25);
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 8px;
+    color: white;
 }
 
-.me{
-    background:#C8A2C8;
-    color:black;
-    padding:8px;
-    border-radius:8px;
+.me {
+    background: #C8A2C8;
+    color: black;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 8px;
 }
