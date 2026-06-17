@@ -32,6 +32,16 @@ local function SendDiscordLog(channel, playerName, playerId, message)
     }), { ["Content-Type"] = "application/json" })
 end
 
+-- Local proximity chat (non-command text)
+RegisterNetEvent("vpdchat:localChat")
+AddEventHandler("vpdchat:localChat", function(msg)
+    local src = source
+    if not msg or msg == "" then return end
+
+    local name = GetPlayerName(src)
+    TriggerClientEvent("vpdchat:local", -1, src, name, msg)
+end)
+
 -- /me command - proximity-based 3D action text
 RegisterCommand("me", function(source, args, rawCommand)
     if not args or #args == 0 then return end

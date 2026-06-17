@@ -1,3 +1,6 @@
+-- This resource replaces the default GTA V / FiveM chat.
+-- Remove or comment out "ensure chat" in your server.cfg to avoid conflicts.
+
 Config = {}
 
 Config.ChatRange = 20.0
