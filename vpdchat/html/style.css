@@ -1,0 +1,44 @@
+body{
+    margin:0;
+    padding:0;
+    font-family:'Segoe UI';
+}
+
+.chat-window{
+    position:absolute;
+    left:15px;
+    bottom:15px;
+    width:450px;
+}
+
+.twt{
+    background:#1DA1F2;
+    padding:8px;
+    margin-top:5px;
+    border-radius:8px;
+    color:white;
+}
+
+.blackweb{
+    background:#121212;
+    border-left:4px solid #9C27B0;
+    padding:8px;
+    margin-top:5px;
+    border-radius:8px;
+    color:white;
+}
+
+.ooc{
+    background:rgba(150,150,150,.25);
+    padding:8px;
+    margin-top:5px;
+    border-radius:8px;
+    color:white;
+}
+
+.me{
+    background:#C8A2C8;
+    color:black;
+    padding:8px;
+    border-radius:8px;
+}
