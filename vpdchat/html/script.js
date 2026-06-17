@@ -17,7 +17,11 @@ window.addEventListener('message', function (event) {
     var data = event.data;
 
     if (data.action === 'addMessage') {
-        addMessage(data.html);
+        addStructuredMessage(data);
+    }
+
+    if (data.action === 'addRawHtml') {
+        addRawMessage(data.html);
     }
 
     if (data.action === 'openChat') {
@@ -29,18 +33,77 @@ window.addEventListener('message', function (event) {
     }
 });
 
-function addMessage(html) {
-    var temp = document.createElement('div');
-    temp.innerHTML = html.trim();
-    var el = temp.firstElementChild;
+function createTextNode(text) {
+    return document.createTextNode(text);
+}
 
-    if (!el) {
-        el = document.createElement('div');
-        el.classList.add('msg-local');
-        el.textContent = html;
+function createSpan(className, text) {
+    var span = document.createElement('span');
+    span.className = className;
+    span.textContent = text;
+    return span;
+}
+
+function addStructuredMessage(data) {
+    var el = document.createElement('div');
+    el.classList.add('chat-msg');
+
+    switch (data.type) {
+        case 'local':
+            el.classList.add('msg-local');
+            if (data.name) {
+                el.appendChild(createSpan('msg-name', data.name));
+                el.appendChild(createTextNode(': ' + data.message));
+            } else {
+                el.appendChild(createTextNode(data.message));
+            }
+            break;
+
+        case 'me':
+            el.classList.add('msg-me');
+            el.textContent = '* ' + data.message + ' *';
+            break;
+
+        case 'twt':
+            el.classList.add('msg-twt');
+            el.appendChild(createSpan('msg-icon', '\uD83D\uDC26'));
+            el.appendChild(createTextNode(' '));
+            el.appendChild(createSpan('msg-tag', '@' + data.name));
+            el.appendChild(createTextNode(': ' + data.message));
+            break;
+
+        case 'blackweb':
+            el.classList.add('msg-blackweb');
+            el.appendChild(createSpan('msg-icon', '\uD83D\uDD77\uFE0F'));
+            el.appendChild(createTextNode(' '));
+            el.appendChild(createSpan('msg-tag', 'BLACKWEB'));
+            el.appendChild(createTextNode(': ' + data.message));
+            break;
+
+        case 'ooc':
+            el.classList.add('msg-ooc');
+            el.appendChild(createTextNode('(( '));
+            el.appendChild(createSpan('msg-name', data.name));
+            el.appendChild(createTextNode(': ' + data.message + ' ))'));
+            break;
+
+        default:
+            el.classList.add('msg-local');
+            el.textContent = data.message || '';
+            break;
     }
 
-    el.classList.add('chat-msg');
+    appendMessage(el);
+}
+
+function addRawMessage(html) {
+    var el = document.createElement('div');
+    el.classList.add('chat-msg', 'msg-local');
+    el.textContent = html;
+    appendMessage(el);
+}
+
+function appendMessage(el) {
     chatMessages.appendChild(el);
 
     while (chatMessages.children.length > MAX_MESSAGES) {

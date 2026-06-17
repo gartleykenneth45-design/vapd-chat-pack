@@ -1,5 +1,16 @@
 local isChatOpen = false
 
+local function escapeHtml(str)
+    if not str then return "" end
+    str = tostring(str)
+    str = str:gsub("&", "&amp;")
+    str = str:gsub("<", "&lt;")
+    str = str:gsub(">", "&gt;")
+    str = str:gsub('"', "&quot;")
+    str = str:gsub("'", "&#39;")
+    return str
+end
+
 -- Disable default GTA V text chat on startup
 Citizen.CreateThread(function()
     Wait(500)
@@ -53,24 +64,30 @@ end)
 -- Intercept default chat:addMessage from other resources
 RegisterNetEvent("chat:addMessage")
 AddEventHandler("chat:addMessage", function(data)
-    local html = ""
     if data.template then
-        html = data.template
+        local html = data.template
         if data.args then
             for i, arg in ipairs(data.args) do
-                html = html:gsub("{" .. (i - 1) .. "}", arg)
+                local safe = escapeHtml(arg):gsub("%%", "%%%%")
+                html = html:gsub("{" .. (i - 1) .. "}", safe)
             end
         end
+        SendNUIMessage({ action = "addRawHtml", html = html })
     elseif data.args and #data.args > 0 then
         if #data.args > 1 then
-            html = '<div class="msg-local"><span class="msg-name">' .. tostring(data.args[1]) .. '</span>: ' .. tostring(data.args[2]) .. '</div>'
+            SendNUIMessage({
+                action = "addMessage",
+                type = "local",
+                name = tostring(data.args[1]),
+                message = tostring(data.args[2])
+            })
         else
-            html = '<div class="msg-local">' .. tostring(data.args[1]) .. '</div>'
+            SendNUIMessage({
+                action = "addMessage",
+                type = "local",
+                message = tostring(data.args[1])
+            })
         end
-    end
-
-    if html ~= "" then
-        SendNUIMessage({ action = "addMessage", html = html })
     end
 end)
 
@@ -89,7 +106,9 @@ AddEventHandler("vpdchat:local", function(senderId, name, msg)
 
     SendNUIMessage({
         action = "addMessage",
-        html = '<div class="msg-local"><span class="msg-name">' .. name .. '</span>: ' .. msg .. '</div>'
+        type = "local",
+        name = name,
+        message = msg
     })
 end)
 
@@ -108,7 +127,8 @@ AddEventHandler("vpdchat:3dme", function(id, text)
 
     SendNUIMessage({
         action = "addMessage",
-        html = '<div class="msg-me">* ' .. text .. ' *</div>'
+        type = "me",
+        message = text
     })
 
     local displayTime = GetGameTimer() + Config.MeDuration
@@ -127,7 +147,9 @@ RegisterNetEvent("vpdchat:twt")
 AddEventHandler("vpdchat:twt", function(name, msg)
     SendNUIMessage({
         action = "addMessage",
-        html = '<div class="msg-twt"><span class="msg-icon">&#x1F426;</span> <span class="msg-tag">@' .. name .. '</span>: ' .. msg .. '</div>'
+        type = "twt",
+        name = name,
+        message = msg
     })
 end)
 
@@ -136,7 +158,8 @@ RegisterNetEvent("vpdchat:blackweb")
 AddEventHandler("vpdchat:blackweb", function(msg)
     SendNUIMessage({
         action = "addMessage",
-        html = '<div class="msg-blackweb"><span class="msg-icon">&#x1F577;&#xFE0F;</span> <span class="msg-tag">BLACKWEB</span>: ' .. msg .. '</div>'
+        type = "blackweb",
+        message = msg
     })
 end)
 
@@ -145,7 +168,9 @@ RegisterNetEvent("vpdchat:ooc")
 AddEventHandler("vpdchat:ooc", function(name, msg)
     SendNUIMessage({
         action = "addMessage",
-        html = '<div class="msg-ooc">(( <span class="msg-name">' .. name .. '</span>: ' .. msg .. ' ))</div>'
+        type = "ooc",
+        name = name,
+        message = msg
     })
 end)
 
